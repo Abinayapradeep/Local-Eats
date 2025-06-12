@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalEats - Farmers Market Aggregator</title>
+    <meta name="description" content="Find local farmers markets, vendors, and fresh produce in your area">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h2>🌱 LocalEats</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')" class="nav-link active">Home</a></li>
+                <li><a href="#" onclick="showPage('markets')" class="nav-link">Markets</a></li>
+                <li><a href="#" onclick="showPage('categories')" class="nav-link">Categories</a></li>
+                <li><a href="#" onclick="showPage('map')" class="nav-link">Map</a></li>
+            </ul>
+            <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <main id="main-content">
+        <!-- Home Page -->
+        <div id="home-page" class="page active">
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="hero-content">
+                    <h1>Discover Local Farmers Markets</h1>
+                    <p>Connect with local farmers, artisans, and fresh produce in your area.</p>
+                    <div class="search-bar">
+                        <input type="text" placeholder="Enter your location" id="location-search">
+                        <button class="btn btn-primary" onclick="searchMarkets()">Find Markets</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categories Section -->
+            <section class="section categories-section">
+                <div class="container">
+                    <h2 class="section-title">Browse by Category</h2>
+                    <div class="categories-grid" id="categories-grid">
+                        <!-- Categories will be populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Markets Section -->
+            <section class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">Featured Markets</h2>
+                        <a href="#" onclick="showPage('markets')" class="view-all-link">View All Markets</a>
+                    </div>
+                    <div class="markets-grid" id="featured-markets">
+                        <!-- Featured markets will be populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Map Section -->
+            <section class="section map-section">
+                <div class="container">
+                    <h2 class="section-title">Find Markets Near You</h2>
+                    <div id="home-map" class="map-container"></div>
+                    <div class="map-cta">
+                        <button class="btn btn-secondary" onclick="showPage('map')">Explore Interactive Map</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How It Works Section -->
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">How It Works</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">🔍</div>
+                            <h3>Discover</h3>
+                            <p>Search for farmers markets in your area and browse by categories.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">📍</div>
+                            <h3>Visit</h3>
+                            <p>Get directions, hours, and all the information you need for your visit.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">⭐</div>
+                            <h3>Rate & Review</h3>
+                            <p>Share your experience and help others discover great local markets.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Markets Page -->
+        <div id="markets-page" class="page">
+            <section class="section">
+                <div class="container">
+                    <h1 class="page-title">Farmers Markets</h1>
+                    
+                    <!-- Search and Filter -->
+                    <div class="filter-panel">
+                        <div class="search-row">
+                            <input type="text" placeholder="Search markets..." id="market-search" class="search-input">
+                            <input type="text" placeholder="Location" class="search-input">
+                            <button class="btn btn-primary">Search</button>
+                        </div>
+                        
+                        <div class="filter-section">
+                            <h3>Filter by Category</h3>
+                            <div id="category-filters" class="category-filters">
+                                <!-- Category filters will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Results -->
+                    <div class="results-header">
+                        <h2 id="results-count">Loading markets...</h2>
+                        <select id="sort-select">
+                            <option value="distance">Sort by Distance</option>
+                            <option value="rating">Sort by Rating</option>
+                            <option value="name">Sort by Name</option>
+                        </select>
+                    </div>
+                    
+                    <div class="markets-grid" id="all-markets">
+                        <!-- All markets will be populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Categories Page -->
+        <div id="categories-page" class="page">
+            <section class="section">
+                <div class="container">
+                    <h1 class="page-title">Product Categories</h1>
+                    <div class="categories-grid large" id="all-categories">
+                        <!-- All categories will be populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Map Page -->
+        <div id="map-page" class="page">
+            <section class="section">
+                <div class="container">
+                    <h1 class="page-title">Interactive Market Map</h1>
+                    <div class="map-layout">
+                        <div class="map-sidebar">
+                            <div class="filter-card">
+                                <h3>Filter by Category</h3>
+                                <div id="map-category-filters" class="category-filters">
+                                    <!-- Category filters will be populated by JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <div class="markets-list">
+                                <h3>Markets <span id="map-results-count">(0)</span></h3>
+                                <div id="map-markets-list">
+                                    <!-- Markets list will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="map-main">
+                            <div id="interactive-map" class="map-container large"></div>
+                            
+                            <div id="selected-market-details" class="market-details hidden">
+                                <!-- Selected market details will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>🌱 LocalEats</h3>
+                    <p>Connecting communities with local farmers markets and fresh produce.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" onclick="showPage('home')">Home</a></li>
+                        <li><a href="#" onclick="showPage('markets')">Markets</a></li>
+                        <li><a href="#" onclick="showPage('categories')">Categories</a></li>
+                        <li><a href="#" onclick="showPage('map')">Map</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="#">Fruits</a></li>
+                        <li><a href="#">Vegetables</a></li>
+                        <li><a href="#">Dairy</a></li>
+                        <li><a href="#">Baked Goods</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 LocalEats. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
